@@ -10,6 +10,10 @@ export default function PlayerProfile() {
   const activeAddress = useActiveAddress();
   const { connected } = useConnection();
 
+  //  ********************************
+  // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
+  // ********************************
+
   const fetchPlayerProfile = async () => {
     if (!activeAddress) {
       console.error("No active address found");
@@ -81,8 +85,7 @@ export default function PlayerProfile() {
 
   return (
     <div className="text-2xl font-bold text-red-400">
-      {currentPlayer ? <p>{currentPlayer.name}</p> : <p>ANON</p>}
+      {currentPlayer ? <p>{currentPlayer.name}</p> : <p>Shradhesh</p>}
     </div>
   );
 }
-

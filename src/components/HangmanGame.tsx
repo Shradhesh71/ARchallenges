@@ -7,10 +7,13 @@ import { dryrunResult, messageResult } from "@/lib/utils";
 const GameGround = () => {
   const { mode, setMode, gameState, handleGuess, resetGame } = useGameContext();
 
-  
+  //  ********************************
+  // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
+  // ********************************
 
   // Display the current word with underscores for unguessed letters
-  const displayWord = "gameState.word"
+  // const displayWord = gameState.word
+  const displayWord = "gameS"
     .split("")
     .map((letter) => (gameState.guessedLetters.includes(letter) ? letter : "_"))
     .join(" ");
@@ -31,12 +34,12 @@ const GameGround = () => {
       {mode === "playing" && (
         <>
           <h1 className="text-3xl font-bold mb-4">Guess & Survive</h1>
-          
+
           {/* Word Display Section */}
           <div className="flex flex-col items-center mb-10">
             {/* Category Display */}
             <div className="text-3xl font-semibold text-blue-600 mb-6 bg-gray-100 px-6 py-2 rounded-md shadow-lg border-2 border-blue-300">
-              gameState
+              Movies
             </div>
 
             {/* Word Display with Blanks and Correct Guesses */}
@@ -136,7 +139,7 @@ const GameGround = () => {
 
           {/* Attempts Remaining */}
           <p className="mt-4 text-lg">
-            Remaining Attempts: {gameState.remainingAttempts}
+            Remaining Wrong Attempts: {gameState.remainingAttempts}
           </p>
         </>
       )}

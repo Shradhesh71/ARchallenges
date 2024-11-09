@@ -4,16 +4,18 @@ import { toast } from "@/hooks/use-toast";
 import { dryrunResult, messageResult } from "@/lib/utils";
 
 export default function JoinWaiting() {
+  const { setMode, gameState } = useGameContext();
 
-  const { setMode, gameState } =
-    useGameContext();
+  //  ********************************
+  // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
+  // ********************************
 
   const handlePlayNow = async () => {
     console.log("Button clicked");
 
     if (gameState) {
-    // if (currentPlayer) {
-    //   console.log("Current player:", currentPlayer);
+      // if (currentPlayer) {
+      //   console.log("Current player:", currentPlayer);
 
       // Wait for the player registration message to be sent to the AO process
       const { Messages, Spawns, Output, Error } = await messageResult(
@@ -40,8 +42,10 @@ export default function JoinWaiting() {
         setMode("playing");
       } else if (Messages[0].Data === "You are already registered.") {
         toast({
-          title: "Player already registered.",
-          description: "Please wait for other players to join.",
+          // title: "Player already registered.",
+          // description: "Please wait for other players to join.",
+          title: "Player Successfully registered.",
+          description: "Your Game is Start now!",
         });
 
         //   setJoinedPlayers([...joinedPlayers, currentPlayer]);
@@ -59,12 +63,12 @@ export default function JoinWaiting() {
         userRes.some(
           (user: { id: string; isCreator: number }) =>
             user.id === user.id && user.isCreator === 1
-            // user.id === currentPlayer.id && user.isCreator === 1
+          // user.id === currentPlayer.id && user.isCreator === 1
         )
       ) {
         // currentPlayer.isCreator = true;
       }
-    //   setJoinedPlayers(userRes);
+      //   setJoinedPlayers(userRes);
       setTimeout(() => {
         setMode("playing");
       }, 1000);

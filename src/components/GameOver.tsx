@@ -11,21 +11,21 @@ interface Player {
 const testPlayers: Player[] = [
   {
     id: "player1",
-    name: "Shradhesh",
-    score: 0,
-    isCreator: true,
-  },
-  {
-    id: "player2",
     name: "Samuel",
     score: 20,
     isCreator: false,
   },
   {
-    id: "player3",
-    name: "Ankush",
+    id: "player2",
+    name: "doge",
     score: 10,
     isCreator: false,
+  },
+  {
+    id: "player1",
+    name: "Shradhesh",
+    score: 0,
+    isCreator: true,
   },
 ];
 

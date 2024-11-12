@@ -30,17 +30,6 @@ export default function JoinWaiting() {
       );
 
       if (Messages[0].Data === "Successfully registered.") {
-        // const { Messages, Spawns, Output, Error } = await messageResult(
-        //   gameState.gameProcess,
-        //   [
-        //     {
-        //       name: "Action",
-        //       value: "Start-Game",
-        //     },
-        //   ]
-        // );
-        // console.log("Messages after game start: ", Messages);
-
         toast({
           title: "Successfully registered.",
           description: "Start your game now.",
@@ -48,18 +37,6 @@ export default function JoinWaiting() {
 
         setMode("playing");
       } else if (Messages[0].Data === "You are already registered.") {
-        // const { Messages, Spawns, Output, Error } = await messageResult(
-        //   gameState.gameProcess,
-        //   [
-        //     {
-        //       name: "Action",
-        //       value: "Start-Game",
-        //     },
-        //   ]
-        // );
-
-        // console.log("Messages after game start: ", Messages);
-
         toast({
           title: "Player Game Start.",
           description: "Your Game are Start Now.",

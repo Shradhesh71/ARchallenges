@@ -5,6 +5,10 @@ import { useEffect } from "react";
 import { dryrunResult, messageResult } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 
+  //  ********************************
+  // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
+  // ********************************
+
 type GameStatess = {
   guessedLetters: string;
   category: string;

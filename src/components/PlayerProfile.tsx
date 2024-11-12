@@ -6,7 +6,7 @@ import { useActiveAddress, useConnection } from "arweave-wallet-kit";
 import { useEffect } from "react";
 
 export default function PlayerProfile() {
-  const { currentPlayer, setCurrentPlayer } = useGameContext();
+  // const { currentPlayer, setCurrentPlayer } = useGameContext();
   const activeAddress = useActiveAddress();
   const { connected } = useConnection();
 
@@ -71,7 +71,7 @@ export default function PlayerProfile() {
       };
 
       console.log("Player profile details:", playerDetails);
-      setCurrentPlayer(playerDetails);
+      // setCurrentPlayer(playerDetails);
     } catch (error) {
       console.error("Error fetching player profile:", error);
     }

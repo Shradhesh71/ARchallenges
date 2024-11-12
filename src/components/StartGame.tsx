@@ -14,9 +14,6 @@ export default function JoinWaiting() {
     console.log("Button clicked");
 
     if (gameState) {
-      // if (currentPlayer) {
-      //   console.log("Current player:", currentPlayer);
-
       // Wait for the player registration message to be sent to the AO process
       const { Messages, Spawns, Output, Error } = await messageResult(
         gameState.gameProcess,
@@ -32,43 +29,51 @@ export default function JoinWaiting() {
         ]
       );
 
-      if (Messages[0].Data === "Successfully registered to game.") {
+      if (Messages[0].Data === "Successfully registered.") {
+        // const { Messages, Spawns, Output, Error } = await messageResult(
+        //   gameState.gameProcess,
+        //   [
+        //     {
+        //       name: "Action",
+        //       value: "Start-Game",
+        //     },
+        //   ]
+        // );
+        // console.log("Messages after game start: ", Messages);
+
         toast({
           title: "Successfully registered.",
-          description: "Waiting for other players to join.",
+          description: "Start your game now.",
         });
 
-        //   setJoinedPlayers([...joinedPlayers, currentPlayer]);
         setMode("playing");
       } else if (Messages[0].Data === "You are already registered.") {
+        // const { Messages, Spawns, Output, Error } = await messageResult(
+        //   gameState.gameProcess,
+        //   [
+        //     {
+        //       name: "Action",
+        //       value: "Start-Game",
+        //     },
+        //   ]
+        // );
+
+        // console.log("Messages after game start: ", Messages);
+
         toast({
-          // title: "Player already registered.",
-          // description: "Please wait for other players to join.",
-          title: "Player Successfully registered.",
-          description: "Your Game is Start now!",
+          title: "Player Game Start.",
+          description: "Your Game are Start Now.",
         });
 
-        //   setJoinedPlayers([...joinedPlayers, currentPlayer]);
-      } else return;
-
-      const userRes = await dryrunResult(gameState.gameProcess, [
-        {
-          name: "Action",
-          value: "Joined-Players",
-        },
-      ]);
-
-      console.log("Joined users result", userRes);
-      if (
-        userRes.some(
-          (user: { id: string; isCreator: number }) =>
-            user.id === user.id && user.isCreator === 1
-          // user.id === currentPlayer.id && user.isCreator === 1
-        )
-      ) {
-        // currentPlayer.isCreator = true;
+        setMode("playing");
+      } else {
+        console.log("You are in else", Error);
+        toast({
+          title: "Error in Play Now button!",
+          description: `Error: ${Error}`,
+        });
       }
-      //   setJoinedPlayers(userRes);
+
       setTimeout(() => {
         setMode("playing");
       }, 1000);

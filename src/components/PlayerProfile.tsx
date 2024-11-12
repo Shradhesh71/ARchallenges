@@ -25,7 +25,7 @@ export default function PlayerProfile() {
     try {
       // Step 1: Fetch Profile ID
       const profileIdRes = await dryrun({
-        process: "SNy4m-DrqxWl01YqGM4sxI8qCni-58re8uuJLvZPypY",
+        process: "CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA",
         tags: [{ name: "Action", value: "Get-Profiles-By-Delegate" }],
         signer: createDataItemSigner(window.arweaveWallet),
         data: JSON.stringify({ Address: activeAddress }),
@@ -85,7 +85,7 @@ export default function PlayerProfile() {
 
   return (
     <div className="text-2xl font-bold text-red-400">
-      {currentPlayer ? <p>{currentPlayer.name}</p> : <p>Shradhesh</p>}
+      {/* {currentPlayer ? <p>{currentPlayer.name}</p> : <p>Shradhesh</p>} */}
     </div>
   );
 }

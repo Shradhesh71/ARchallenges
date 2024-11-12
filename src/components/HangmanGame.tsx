@@ -3,17 +3,57 @@
 import { useGameContext } from "@/context/GameContext";
 import { useEffect } from "react";
 import { dryrunResult, messageResult } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
-const GameGround = () => {
-  const { mode, setMode, gameState, handleGuess, resetGame } = useGameContext();
+type GameStatess = {
+  guessedLetters: string;
+  category: string;
+  remainingAttempts: number;
+  word: string;
+  isGameOver: boolean;
+};
 
-  //  ********************************
-  // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
-  // ********************************
+const GameGround = async () => {
+  const { mode, setMode, gameState, handleGuess, setGameState } =
+    useGameContext();
 
-  // Display the current word with underscores for unguessed letters
-  // const displayWord = gameState.word
-  const displayWord = "gameS"
+  const fetchNewWord = async () => {
+    const { Messages, Spawns, Output, Error } = await messageResult(
+      gameState.gameProcess,
+      [
+        {
+          name: "Action",
+          value: "Start-Game",
+        },
+      ]
+    );
+    
+    const currentState: GameStatess = JSON.parse(Messages[0].Data);
+    
+    if (gameState) {
+      
+      toast({
+        title: "Guess the word.",
+        description: `guessing the word of category ${currentState.category}`,
+      });
+
+      setGameState({
+        ...gameState,
+        word: currentState.word,
+        isGameOver: currentState.isGameOver,
+        category: currentState.category,
+        remainingAttempts: currentState.remainingAttempts,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (mode === "playing") fetchNewWord();
+  }, [mode]);
+
+  console.log("gameState: ", gameState);
+  
+  const displayWord = gameState.word
     .split("")
     .map((letter) => (gameState.guessedLetters.includes(letter) ? letter : "_"))
     .join(" ");
@@ -39,7 +79,7 @@ const GameGround = () => {
           <div className="flex flex-col items-center mb-10">
             {/* Category Display */}
             <div className="text-3xl font-semibold text-blue-600 mb-6 bg-gray-100 px-6 py-2 rounded-md shadow-lg border-2 border-blue-300">
-              Movies
+              {gameState.category}
             </div>
 
             {/* Word Display with Blanks and Correct Guesses */}
@@ -142,20 +182,6 @@ const GameGround = () => {
             Remaining Wrong Attempts: {gameState.remainingAttempts}
           </p>
         </>
-      )}
-
-      {mode === "gameOver" && (
-        <div className="text-center">
-          <h2 className="text-3xl font-bold">
-            {gameState.remainingAttempts > 0 ? "🎉 You Win!" : "💧 Game Over!"}
-          </h2>
-          <button
-            className="mt-4 bg-blue-500 text-white px-6 py-2 rounded"
-            onClick={resetGame}
-          >
-            Play Again
-          </button>
-        </div>
       )}
     </div>
   );

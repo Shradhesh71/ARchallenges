@@ -171,12 +171,12 @@ const GameGround = async () => {
               <div
                 className="absolute bottom-0 w-full bg-gradient-to-t from-blue-500 to-blue-300 animate-wave"
                 style={{
-                  height: `${gameState.remainingAttempts * 20}%`,
+                  height: `${Math.abs(gameState.remainingAttempts  -5) * 20}%`,
                 }}
               />
               {/* Water level text */}
               <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
-                {gameState.remainingAttempts % 5}/5
+                {Math.abs(gameState.remainingAttempts  -5)}/5
               </div>
             </div>
           </div>

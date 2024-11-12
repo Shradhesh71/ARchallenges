@@ -33,16 +33,13 @@ export default function Navbar() {
     }
   }, [gameState.gameProcess]);
 
-  //  ********************************
-  // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
-  // ********************************
 
   return (
     <header className="w-full p-4 md:px-8">
       <nav className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Guess & Survive</h1>
         {activeAddress && connected ? (
-          <Button variant="destructive">{gameState.guessedLetters}</Button>
+          <Button variant="destructive">{gameState.score} Score </Button>
         ) : (
           ""
         )}

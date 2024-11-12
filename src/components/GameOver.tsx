@@ -12,19 +12,19 @@ const testPlayers: Player[] = [
   {
     id: "player1",
     name: "Shradhesh",
-    score: 130,
+    score: 0,
     isCreator: true,
   },
   {
     id: "player2",
     name: "Samuel",
-    score: 95,
+    score: 20,
     isCreator: false,
   },
   {
     id: "player3",
     name: "Ankush",
-    score: 75,
+    score: 10,
     isCreator: false,
   },
 ];

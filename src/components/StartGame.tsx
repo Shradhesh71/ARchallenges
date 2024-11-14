@@ -6,15 +6,10 @@ import { dryrunResult, messageResult } from "@/lib/utils";
 export default function JoinWaiting() {
   const { setMode, gameState } = useGameContext();
 
-  //  ********************************
-  // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
-  // ********************************
-
   const handlePlayNow = async () => {
     console.log("Button clicked");
     // const playerName = prompt("Please enter your display name:");
     if (gameState) {
-      // Wait for the player registration message to be sent to the AO process
       const { Messages, Spawns, Output, Error } = await messageResult(
         gameState.gameProcess,
         [
@@ -25,7 +20,6 @@ export default function JoinWaiting() {
           {
             name: "DisplayName",
             value: "currentPlayer.name",
-            // value: playerName!,
           },
         ]
       );
@@ -51,10 +45,6 @@ export default function JoinWaiting() {
           description: `Error: ${Error}`,
         });
       }
-
-      setTimeout(() => {
-        setMode("playing");
-      }, 1000);
     } else {
       toast({
         title: "Please login to play.",

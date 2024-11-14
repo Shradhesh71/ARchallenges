@@ -4,14 +4,7 @@
 
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
-import { dryrunResult, messageResult } from "@/lib/utils";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 // Define the different game modes for Hangman
 type GameMode = "landing" | "playing" | "gameOver";
@@ -44,7 +37,6 @@ interface GameContextType {
   gameState: HangmanGameState;
   setGameState: (gameState: HangmanGameState) => void;
   handleGuess: (letter: string) => void;
-  // fetchNewWord: () => Promise<void>;
 }
 
 // Create the context with default values
@@ -60,10 +52,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     remainingAttempts: 5,
     isGameOver: false,
     category: "",
-    mode:"landing",
-    score: 0
+    mode: "landing",
+    score: 0,
   });
-
 
   // Function to handle letter guesses
   const handleGuess = (letter: string) => {
@@ -86,11 +77,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       remainingAttempts,
       isGameOver,
     });
-
-    // if (isGameOver) setMode("gameOver");
   };
-
-
 
   return (
     <GameContext.Provider

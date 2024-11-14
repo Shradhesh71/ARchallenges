@@ -13,16 +13,18 @@ import { useEffect } from "react";
 export default function Navbar() {
   const activeAddress = useActiveAddress();
   const { connected } = useConnection();
-  const { mode, setMode, gameState, handleGuess, setGameState } =
-    useGameContext();
+  const { gameState } = useGameContext();
   const fetchPlayerDetail = async () => {
     console.log("Fetching player detail...");
-    const player = await dryrunResult("CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA", [
-      {
-        name: "Action",
-        value: "Get-Player-Profile",
-      },
-    ]);
+    const player = await dryrunResult(
+      "CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA",
+      [
+        {
+          name: "Action",
+          value: "Get-Player-Profile",
+        },
+      ]
+    );
 
     console.log("player: ", player);
   };
@@ -32,7 +34,6 @@ export default function Navbar() {
       fetchPlayerDetail();
     }
   }, [gameState.gameProcess]);
-
 
   return (
     <header className="w-full p-4 md:px-8">

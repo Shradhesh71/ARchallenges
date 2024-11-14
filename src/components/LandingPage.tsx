@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Users, Clock, Trophy, Brain } from "lucide-react";
+import { Users, Clock, Trophy, Brain } from "lucide-react";
 import PlayerProfile from "./PlayerProfile";
 import StartGame from "./StartGame";
 
@@ -12,12 +12,13 @@ export default function LandingPage() {
           Think, Guess, Laugh
         </h2>
         <p className="text-xl md:text-2xl mb-8 text-muted-foreground">
-          Test your word-guessing skills in our on-chain Hangman game! 🎮🔗 Play, compete, and challenge yourself while exploring blockchain-powered fun!
+          Test your word-guessing skills in our on-chain Hangman game! 🎮🔗
+          Play, compete, and challenge yourself while exploring
+          blockchain-powered fun!
         </p>
         <div className="flex items-center justify-center gap-4 w-full">
           <PlayerProfile />
-          <StartGame/>
-          
+          <StartGame />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">

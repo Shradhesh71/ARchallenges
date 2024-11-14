@@ -10,18 +10,13 @@ interface Player {
   isCreator: boolean;
 }
 
-
 export default function GameOver() {
   const [loading, setLoading] = useState(true);
   const [players, setPlayers] = useState<Player[]>([]);
 
-  //  ********************************
-  // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
-  // ********************************
   useEffect(() => {
     setLoading(false);
     const loadLeaderboard = async () => {
-      console.log("gs")
       const leaderboard = await fetchLeaderboard();
       console.log("Fetched leaderboard:", leaderboard);
       setPlayers(leaderboard);
@@ -52,11 +47,10 @@ export default function GameOver() {
                   {players.map((player, index) => (
                     <tr key={player.id} className="hover:bg-gray-50">
                       <td className="py-3 px-4 font-semibold">{index + 1}</td>
-                      <td className="py-3 px-4">{player.id.slice(0, 6)}...{player.id.slice(-6)}</td>
+                      <td className="py-3 px-4">
+                        {player.id.slice(0, 6)}...{player.id.slice(-6)}
+                      </td>
                       <td className="py-3 px-4">{player.score}</td>
-                      {/* <td className="py-3 px-4">
-                        {player.isCreator ? "Creator" : "Player"}
-                      </td> */}
                     </tr>
                   ))}
                 </tbody>

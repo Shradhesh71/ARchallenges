@@ -25,7 +25,7 @@ export async function dryrunResult(
 
 export async function messageResult(
   gameProcess: string,
-  tags: { name: string; value: string }[],
+  tags: { name: string; value: any }[],
   data?: any
 ) {
   const res = await message({
@@ -50,21 +50,18 @@ export async function messageResult(
 
 export async function fetchLeaderboard() {
   try {
-    // Define the process and tags for your dryrun query
-    const gameProcess = "CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA"; // Update this if needed
-    const tags = [
-      { name: "Action", value: "Check-Leaderboard" }
-    ];
+    const gameProcess = "CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA";
+    const tags = [{ name: "Action", value: "Check-Leaderboard" }];
 
     // Perform the dryrun to fetch the leaderboard data
     const res = await dryrunResult(gameProcess, tags);
-    console.log("dryrunResult: ",res);
-//     dryrunResult:  
-// (4) [{…}, {…}, {…}, {…}]
-// 0: {name: 'currentPlayer.name', isCreator: 0, score: 0, id: 'p6bidPsrHEhGiQ4wth30my2-NMywQrQZCTheNMYdA78'}
-// 1: {name: 'currentPlayer.name', isCreator: 0, score: 0, id: 'bfVoqy30rG4CfgRl4r7rYVKYkrR9D_pUWoG8n4QqXsY'}
-// 2: {name: 'currentPlayer.name', isCreator: 0, score: 0, id: 'dlydDd98M6HWpvwk_v-j-qrsJrfRShAMqsz33OB_wTI'}
-// 3:{name: 'currentPlayer.name', isCreator: 0, score: 0, id: '5uxxZMZewOCNDACMXKkwQ9ZOGGcbJaOfeKjMVPUKx-g'}
+    console.log("dryrunResult: ", res);
+    //     dryrunResult:
+    // (4) [{…}, {…}, {…}, {…}]
+    // 0: {name: 'currentPlayer.name', isCreator: 0, score: 0, id: 'p6bidPsrHEhGiQ4wth30my2-NMywQrQZCTheNMYdA78'}
+    // 1: {name: 'currentPlayer.name', isCreator: 0, score: 0, id: 'bfVoqy30rG4CfgRl4r7rYVKYkrR9D_pUWoG8n4QqXsY'}
+    // 2: {name: 'currentPlayer.name', isCreator: 0, score: 0, id: 'dlydDd98M6HWpvwk_v-j-qrsJrfRShAMqsz33OB_wTI'}
+    // 3:{name: 'currentPlayer.name', isCreator: 0, score: 0, id: '5uxxZMZewOCNDACMXKkwQ9ZOGGcbJaOfeKjMVPUKx-g'}
     // Map the result to a readable format
     const players = res.map((item: any) => ({
       id: item.id,
@@ -76,5 +73,44 @@ export async function fetchLeaderboard() {
   } catch (error) {
     console.error("Error fetching leaderboard:", error);
     return [];
+  }
+}
+
+export async function handleGameOver(playerWon: boolean, activeAddress: any) {
+  // async function handleGameOver(playerWon: boolean) {
+  try {
+    const score = playerWon ? 10 : 0;
+    console.log("Attempting to update score with data:", {
+      playerId: activeAddress,
+      score: score,
+    });
+    console.log(
+      "gameState.gameProcess: ",
+      "CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA"
+    );
+
+    const { Messages, Spawns, Output, Error } = await messageResult(
+      "CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA",
+      [
+        {
+          name: "Action",
+          value: "Update-Player-Score",
+        },
+        {
+          name: "score",
+          value: score,
+        },
+      ]
+    );
+
+    console.log("Game Over - Score Update", { Messages, Output, Error });
+    console.log("Data: ", Messages[0].Data);
+    if (Error) {
+      console.error("Error updating score:", Error);
+    } else {
+      console.log("Score updated successfully.");
+    }
+  } catch (error) {
+    console.error("Failed to send score update:", error);
   }
 }

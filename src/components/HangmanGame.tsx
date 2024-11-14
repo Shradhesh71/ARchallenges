@@ -2,9 +2,10 @@
 
 import { useGameContext } from "@/context/GameContext";
 import { useEffect } from "react";
-import { dryrunResult, messageResult } from "@/lib/utils";
+import { dryrunResult, handleGameOver, messageResult } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { useActiveAddress } from "arweave-wallet-kit";
+import { message } from "@permaweb/aoconnect";
 
 //  ********************************
 // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
@@ -39,7 +40,14 @@ const GameGround = async () => {
     if (gameState) {
       toast({
         title: "Guess the word.",
-        description: `guessing the word of category ${currentState.category}`,
+        description: (
+          <>
+            guessing the word of category{" "}
+            <span className="text-red-500 font-bold">
+              {currentState.category}
+            </span>
+          </>
+        ),
       });
 
       setGameState({
@@ -52,62 +60,30 @@ const GameGround = async () => {
     }
   };
 
-  useEffect(() => {
-    if (mode === "playing") fetchNewWord();
-  }, [mode]);
-
-  async function handleGameOver(playerWon: boolean) {
-    try {
-      console.log("Attempting to update score with data:", {
-        playerId: activeAddress,
-        score: playerWon ? 10 : 0,
-      });
-      console.log("gameState.gameProcess: ", gameState.gameProcess);
-      const { Messages, Spawns, Output, Error } = await messageResult(
-        gameState.gameProcess,
-        [
-          {
-            name: "Action",
-            value: "Update-Player-Score",
-          },
-        ],
-        {
-          playerId: activeAddress,
-          score: playerWon ? 10 : 0,
-        }
-      );
-
-      console.log("Game Over - Score Update", { Messages, Output, Error });
-      if (Error) {
-        console.error("Error updating score:", Error);
-      } else {
-        console.log("Score updated successfully.");
-      }
-    } catch (error) {
-      console.error("Failed to send score update:", error);
-    }
-  }
-
-  // console.log("gameState: ", gameState);
+  console.log("gameState: ", gameState);
 
   useEffect(() => {
     if (gameState.isGameOver) {
       if (gameState.remainingAttempts > 0) {
+        handleGameOver(true, activeAddress);
         toast({
           title: "Congratulations!",
           description: "You have guessed the word correctly.",
         });
-        handleGameOver(true);
       } else {
         toast({
           title: "Game Over!",
           description: "You have lost the game.",
         });
-        handleGameOver(false);
+        handleGameOver(false, activeAddress);
       }
-      setTimeout(() => setMode("gameOver"), 50000);
+      setTimeout(() => setMode("gameOver"), 8000);
     }
   }, [gameState.isGameOver, setMode]);
+
+  useEffect(() => {
+    if (mode === "playing") fetchNewWord();
+  }, [mode]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -124,7 +100,6 @@ const GameGround = async () => {
 
             {/* Word Display with Blanks and Correct Guesses */}
             <div className="flex gap-4">
-                           
               {/* Word Display with Blanks and Correct Guesses */}
               <div className="flex gap-4">
                 {gameState.word.split("").map((letter, index) => (

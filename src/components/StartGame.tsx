@@ -12,7 +12,7 @@ export default function JoinWaiting() {
 
   const handlePlayNow = async () => {
     console.log("Button clicked");
-
+    // const playerName = prompt("Please enter your display name:");
     if (gameState) {
       // Wait for the player registration message to be sent to the AO process
       const { Messages, Spawns, Output, Error } = await messageResult(
@@ -25,6 +25,7 @@ export default function JoinWaiting() {
           {
             name: "DisplayName",
             value: "currentPlayer.name",
+            // value: playerName!,
           },
         ]
       );

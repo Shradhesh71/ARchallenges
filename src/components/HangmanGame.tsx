@@ -4,10 +4,11 @@ import { useGameContext } from "@/context/GameContext";
 import { useEffect } from "react";
 import { dryrunResult, messageResult } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { useActiveAddress } from "arweave-wallet-kit";
 
-  //  ********************************
-  // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
-  // ********************************
+//  ********************************
+// The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
+// ********************************
 
 type GameStatess = {
   guessedLetters: string;
@@ -18,6 +19,7 @@ type GameStatess = {
 };
 
 const GameGround = async () => {
+  const activeAddress = useActiveAddress();
   const { mode, setMode, gameState, handleGuess, setGameState } =
     useGameContext();
 
@@ -31,11 +33,10 @@ const GameGround = async () => {
         },
       ]
     );
-    
+
     const currentState: GameStatess = JSON.parse(Messages[0].Data);
-    
+
     if (gameState) {
-      
       toast({
         title: "Guess the word.",
         description: `guessing the word of category ${currentState.category}`,
@@ -55,21 +56,56 @@ const GameGround = async () => {
     if (mode === "playing") fetchNewWord();
   }, [mode]);
 
-  console.log("gameState: ", gameState);
-  
-  const displayWord = gameState.word
-    .split("")
-    .map((letter) => (gameState.guessedLetters.includes(letter) ? letter : "_"))
-    .join(" ");
+  async function handleGameOver(playerWon: boolean) {
+    try {
+      console.log("Attempting to update score with data:", {
+        playerId: activeAddress,
+        score: playerWon ? 10 : 0,
+      });
+      console.log("gameState.gameProcess: ", gameState.gameProcess);
+      const { Messages, Spawns, Output, Error } = await messageResult(
+        gameState.gameProcess,
+        [
+          {
+            name: "Action",
+            value: "Update-Player-Score",
+          },
+        ],
+        {
+          playerId: activeAddress,
+          score: playerWon ? 10 : 0,
+        }
+      );
 
-  // Function to handle letter click
-  const onLetterClick = (letter: string) => {
-    handleGuess(letter);
-  };
+      console.log("Game Over - Score Update", { Messages, Output, Error });
+      if (Error) {
+        console.error("Error updating score:", Error);
+      } else {
+        console.log("Score updated successfully.");
+      }
+    } catch (error) {
+      console.error("Failed to send score update:", error);
+    }
+  }
+
+  // console.log("gameState: ", gameState);
 
   useEffect(() => {
     if (gameState.isGameOver) {
-      setTimeout(() => setMode("gameOver"), 500);
+      if (gameState.remainingAttempts > 0) {
+        toast({
+          title: "Congratulations!",
+          description: "You have guessed the word correctly.",
+        });
+        handleGameOver(true);
+      } else {
+        toast({
+          title: "Game Over!",
+          description: "You have lost the game.",
+        });
+        handleGameOver(false);
+      }
+      setTimeout(() => setMode("gameOver"), 50000);
     }
   }, [gameState.isGameOver, setMode]);
 
@@ -88,16 +124,22 @@ const GameGround = async () => {
 
             {/* Word Display with Blanks and Correct Guesses */}
             <div className="flex gap-4">
-              {displayWord.split("").map((letter, index) => (
-                <span
-                  key={index}
-                  className={`text-4xl font-bold border-b-4 ${
-                    letter === "_" ? "border-gray-400" : "border-green-500"
-                  } text-gray-800 px-2`}
-                >
-                  {letter}
-                </span>
-              ))}
+                           
+              {/* Word Display with Blanks and Correct Guesses */}
+              <div className="flex gap-4">
+                {gameState.word.split("").map((letter, index) => (
+                  <span
+                    key={index}
+                    className={`text-4xl font-bold border-b-4 px-2 ${
+                      gameState.guessedLetters.includes(letter)
+                        ? "border-green-500 text-gray-800"
+                        : "border-gray-400 text-gray-500"
+                    }`}
+                  >
+                    {gameState.guessedLetters.includes(letter) ? letter : "_"}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -105,17 +147,15 @@ const GameGround = async () => {
           <div className="space-y-4">
             {/* Row 1: A - I */}
             <div className="flex justify-center gap-2">
-              {"QWERTYUIOP".split("").map((letter) => (
+              {"qwertyuiop".split("").map((letter) => (
                 <button
                   key={letter}
-                  onClick={() => onLetterClick(letter)}
-                  className={`px-4 py-2 rounded-lg transition-all ${
+                  className={`px-4 py-2 rounded ${
                     gameState.guessedLetters.includes(letter)
-                      ? gameState.word.includes(letter)
-                        ? "bg-green-500 text-white"
-                        : "bg-red-500 text-white"
-                      : "bg-blue-500 hover:bg-blue-600 text-white"
-                  }`}
+                      ? "bg-red-500 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-700"
+                  } text-white`}
+                  onClick={() => handleGuess(letter)}
                   disabled={gameState.guessedLetters.includes(letter)}
                 >
                   {letter}
@@ -125,17 +165,15 @@ const GameGround = async () => {
 
             {/* Row 2: J - R */}
             <div className="flex justify-center gap-2">
-              {"ASDFGHJKL".split("").map((letter) => (
+              {"asdfghjkl".split("").map((letter) => (
                 <button
                   key={letter}
-                  onClick={() => onLetterClick(letter)}
-                  className={`px-4 py-2 rounded-lg transition-all ${
+                  className={`px-4 py-2 rounded ${
                     gameState.guessedLetters.includes(letter)
-                      ? gameState.word.includes(letter)
-                        ? "bg-green-500 text-white"
-                        : "bg-red-500 text-white"
-                      : "bg-blue-500 hover:bg-blue-600 text-white"
-                  }`}
+                      ? "bg-red-500 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-700"
+                  } text-white`}
+                  onClick={() => handleGuess(letter)}
                   disabled={gameState.guessedLetters.includes(letter)}
                 >
                   {letter}
@@ -145,17 +183,15 @@ const GameGround = async () => {
 
             {/* Row 3: S - Z */}
             <div className="flex justify-center gap-2">
-              {"ZXCVBNM".split("").map((letter) => (
+              {"zxcvbnm".split("").map((letter) => (
                 <button
                   key={letter}
-                  onClick={() => onLetterClick(letter)}
-                  className={`px-4 py-2 rounded-lg transition-all ${
+                  className={`px-4 py-2 rounded ${
                     gameState.guessedLetters.includes(letter)
-                      ? gameState.word.includes(letter)
-                        ? "bg-green-500 text-white"
-                        : "bg-red-500 text-white"
-                      : "bg-blue-500 hover:bg-blue-600 text-white"
-                  }`}
+                      ? "bg-red-500 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-700"
+                  } text-white`}
+                  onClick={() => handleGuess(letter)}
                   disabled={gameState.guessedLetters.includes(letter)}
                 >
                   {letter}
@@ -171,12 +207,12 @@ const GameGround = async () => {
               <div
                 className="absolute bottom-0 w-full bg-gradient-to-t from-blue-500 to-blue-300 animate-wave"
                 style={{
-                  height: `${Math.abs(gameState.remainingAttempts  -5) * 20}%`,
+                  height: `${Math.abs(gameState.remainingAttempts - 5) * 20}%`,
                 }}
               />
               {/* Water level text */}
               <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
-                {Math.abs(gameState.remainingAttempts  -5)}/5
+                {Math.abs(gameState.remainingAttempts - 5)}/5
               </div>
             </div>
           </div>

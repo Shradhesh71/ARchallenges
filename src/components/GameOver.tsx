@@ -1,5 +1,6 @@
 "use client";
 
+import { fetchLeaderboard } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 interface Player {
@@ -8,26 +9,7 @@ interface Player {
   score: number;
   isCreator: boolean;
 }
-const testPlayers: Player[] = [
-  {
-    id: "player1",
-    name: "Samuel",
-    score: 20,
-    isCreator: false,
-  },
-  {
-    id: "player2",
-    name: "doge",
-    score: 10,
-    isCreator: false,
-  },
-  {
-    id: "player1",
-    name: "Shradhesh",
-    score: 0,
-    isCreator: true,
-  },
-];
+
 
 export default function GameOver() {
   const [loading, setLoading] = useState(true);
@@ -37,13 +19,19 @@ export default function GameOver() {
   // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
   // ********************************
   useEffect(() => {
-    setPlayers(testPlayers); // Use test data here
     setLoading(false);
+    const loadLeaderboard = async () => {
+      console.log("gs")
+      const leaderboard = await fetchLeaderboard();
+      console.log("Fetched leaderboard:", leaderboard);
+      setPlayers(leaderboard);
+    };
+    loadLeaderboard();
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-800 to-blue-600 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full text-center mr-14 ml-14">
+      <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full text-center mr-20 ml-20">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">🏆 Game Over!</h1>
 
         {loading ? (
@@ -64,7 +52,7 @@ export default function GameOver() {
                   {players.map((player, index) => (
                     <tr key={player.id} className="hover:bg-gray-50">
                       <td className="py-3 px-4 font-semibold">{index + 1}</td>
-                      <td className="py-3 px-4">{player.name}</td>
+                      <td className="py-3 px-4">{player.id.slice(0, 6)}...{player.id.slice(-6)}</td>
                       <td className="py-3 px-4">{player.score}</td>
                       {/* <td className="py-3 px-4">
                         {player.isCreator ? "Creator" : "Player"}

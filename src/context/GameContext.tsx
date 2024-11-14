@@ -87,7 +87,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       isGameOver,
     });
 
-    if (isGameOver) setMode("gameOver");
+    // if (isGameOver) setMode("gameOver");
   };
 
 

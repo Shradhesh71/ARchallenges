@@ -7,7 +7,6 @@ import {
   result,
 } from "@permaweb/aoconnect";
 import { clsx, type ClassValue } from "clsx";
-import exp from "constants";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -116,7 +115,6 @@ export async function getHint(
 ): Promise<string | null> {
   const word = gameState.word;
   const guessedLetters: string[] = gameState.guessedLetters;
-
   const wordArray = word.split("");
 
   const unguessedLetters = wordArray.filter(

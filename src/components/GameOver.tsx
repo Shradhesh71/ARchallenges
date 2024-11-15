@@ -40,7 +40,6 @@ export default function GameOver() {
                     <th className="py-3 px-4">Rank</th>
                     <th className="py-3 px-4">Player Name</th>
                     <th className="py-3 px-4">Score</th>
-                    {/* <th className="py-3 px-4">Role</th> */}
                   </tr>
                 </thead>
                 <tbody>

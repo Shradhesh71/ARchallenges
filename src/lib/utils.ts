@@ -56,13 +56,7 @@ export async function fetchLeaderboard() {
     // Perform the dryrun to fetch the leaderboard data
     const res = await dryrunResult(gameProcess, tags);
     console.log("dryrunResult: ", res);
-    //     dryrunResult:
-    // (4) [{…}, {…}, {…}, {…}]
-    // 0: {name: 'currentPlayer.name', isCreator: 0, score: 0, id: 'p6bidPsrHEhGiQ4wth30my2-NMywQrQZCTheNMYdA78'}
-    // 1: {name: 'currentPlayer.name', isCreator: 0, score: 0, id: 'bfVoqy30rG4CfgRl4r7rYVKYkrR9D_pUWoG8n4QqXsY'}
-    // 2: {name: 'currentPlayer.name', isCreator: 0, score: 0, id: 'dlydDd98M6HWpvwk_v-j-qrsJrfRShAMqsz33OB_wTI'}
-    // 3:{name: 'currentPlayer.name', isCreator: 0, score: 0, id: '5uxxZMZewOCNDACMXKkwQ9ZOGGcbJaOfeKjMVPUKx-g'}
-    // Map the result to a readable format
+
     const players = res.map((item: any) => ({
       id: item.id,
       name: item.name,
@@ -77,7 +71,6 @@ export async function fetchLeaderboard() {
 }
 
 export async function handleGameOver(playerWon: boolean, activeAddress: any) {
-  // async function handleGameOver(playerWon: boolean) {
   try {
     const score = playerWon ? 10 : 0;
     console.log("Attempting to update score with data:", {
@@ -94,7 +87,7 @@ export async function handleGameOver(playerWon: boolean, activeAddress: any) {
       [
         {
           name: "Action",
-          value: "Update-Player-Score",
+          value: "Update-Score",
         },
         {
           name: "score",

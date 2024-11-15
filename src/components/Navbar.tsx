@@ -7,26 +7,27 @@ import {
 } from "arweave-wallet-kit";
 import { Button } from "@/components/ui/button";
 import { useGameContext } from "@/context/GameContext";
-import { dryrunResult } from "@/lib/utils";
+import { messageResult } from "@/lib/utils";
 import { useEffect } from "react";
 
 export default function Navbar() {
   const activeAddress = useActiveAddress();
   const { connected } = useConnection();
   const { gameState } = useGameContext();
+  let playerScore = 0;
+
   const fetchPlayerDetail = async () => {
     console.log("Fetching player detail...");
-    const player = await dryrunResult(
-      "CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA",
-      [
-        {
-          name: "Action",
-          value: "Get-Player-Profile",
-        },
-      ]
-    );
+    const tags = [{ name: "Action", value: "Get-Player-Profile" }];
 
-    console.log("player: ", player);
+    const { Messages, Spawns, Output, Error } = await messageResult(
+      gameState.gameProcess,
+      tags
+    );
+    const player = Messages[0].Data;
+    const parsedPlayer = JSON.parse(player);
+    playerScore = parsedPlayer[0]?.score;
+    console.log("Player Score:", playerScore);
   };
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function Navbar() {
       <nav className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Guess & Survive</h1>
         {activeAddress && connected ? (
-          <Button variant="destructive">{gameState.score} Score </Button>
+          <Button variant="destructive">{playerScore} Score </Button>
         ) : (
           ""
         )}

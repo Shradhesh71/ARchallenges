@@ -8,7 +8,6 @@ export default function JoinWaiting() {
 
   const handlePlayNow = async () => {
     console.log("Button clicked");
-    // const playerName = prompt("Please enter your display name:");
     if (gameState) {
       const { Messages, Spawns, Output, Error } = await messageResult(
         gameState.gameProcess,
@@ -23,7 +22,7 @@ export default function JoinWaiting() {
           },
         ]
       );
-
+      
       if (Messages[0].Data === "Successfully registered.") {
         toast({
           title: "Successfully registered.",

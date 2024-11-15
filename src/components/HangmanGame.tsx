@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { dryrunResult, handleGameOver, messageResult } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { useActiveAddress } from "arweave-wallet-kit";
-import { message } from "@permaweb/aoconnect";
 
 //  ********************************
 // The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
@@ -67,7 +66,7 @@ const GameGround = async () => {
       if (gameState.remainingAttempts > 0) {
         handleGameOver(true, activeAddress);
         toast({
-          title: "Congratulations!",
+          title: "Congratulations🎉!",
           description: "You have guessed the word correctly.",
         });
       } else {
@@ -77,7 +76,7 @@ const GameGround = async () => {
         });
         handleGameOver(false, activeAddress);
       }
-      setTimeout(() => setMode("gameOver"), 8000);
+      setTimeout(() => setMode("gameOver"), 500);
     }
   }, [gameState.isGameOver, setMode]);
 

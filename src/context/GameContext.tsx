@@ -15,7 +15,7 @@ interface Player {
 }
 
 // Define the structure of the Hangman game state
-interface HangmanGameState {
+export interface HangmanGameState {
   gameProcess: string;
   word: string;
   guessedLetters: string[];

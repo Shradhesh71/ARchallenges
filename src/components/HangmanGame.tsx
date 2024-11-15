@@ -1,10 +1,12 @@
 "use client";
 
 import { useGameContext } from "@/context/GameContext";
-import { useEffect } from "react";
-import { handleGameOver, messageResult } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { handleGameOver, hintScore, messageResult } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { useActiveAddress } from "arweave-wallet-kit";
+import { Button } from "@/components/ui/button";
+import { CircleHelp } from "lucide-react";
 
 type GameStatess = {
   guessedLetters: string;
@@ -16,6 +18,7 @@ type GameStatess = {
 
 const GameGround = async () => {
   const activeAddress = useActiveAddress();
+  const [hintUsed, setHintUsed] = useState(false);
   const { mode, setMode, gameState, handleGuess, setGameState } =
     useGameContext();
 
@@ -52,6 +55,34 @@ const GameGround = async () => {
         category: currentState.category,
         remainingAttempts: currentState.remainingAttempts,
       });
+    }
+  };
+
+  const handleHintClick = async () => {
+    if (hintUsed) {
+      toast({
+        title: "Hint already used",
+        description: "You can only use one hint per game.",
+        variant: "destructive",
+        duration: 3000,
+      });
+      return;
+    }
+    const hint = await hintScore(gameState);
+
+    if (hint) {
+      toast({
+        title: "Here's your hint!",
+        description: (
+          <>
+            The word contains the letter:{" "}
+            <span className="text-red-500 font-bold">"{hint}"</span>
+          </>
+        ),
+        variant: "default",
+        duration: 5000,
+      });
+      setHintUsed(true);
     }
   };
 
@@ -189,6 +220,12 @@ const GameGround = async () => {
           <p className="mt-4 text-lg">
             Remaining Wrong Attempts: {gameState.remainingAttempts}
           </p>
+          <Button
+            className="fixed bottom-10 right-20"
+            onClick={handleHintClick}
+          >
+            <CircleHelp /> Hint
+          </Button>
         </>
       )}
     </div>

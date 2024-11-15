@@ -1,3 +1,5 @@
+import { HangmanGameState } from "@/context/GameContext";
+import { toast } from "@/hooks/use-toast";
 import {
   createDataItemSigner,
   dryrun,
@@ -5,6 +7,7 @@ import {
   result,
 } from "@permaweb/aoconnect";
 import { clsx, type ClassValue } from "clsx";
+import exp from "constants";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -105,5 +108,65 @@ export async function handleGameOver(playerWon: boolean, activeAddress: any) {
     }
   } catch (error) {
     console.error("Failed to send score update:", error);
+  }
+}
+
+export async function getHint(
+  gameState: HangmanGameState
+): Promise<string | null> {
+  const word = gameState.word;
+  const guessedLetters: string[] = gameState.guessedLetters;
+
+  const wordArray = word.split("");
+
+  const unguessedLetters = wordArray.filter(
+    (char) => !guessedLetters.includes(char)
+  );
+
+  if (unguessedLetters.length === 0) {
+    toast({
+      title: "No hint available.",
+      description: "You have guessed all the letters.",
+      variant: "destructive",
+    });
+    return null;
+  }
+
+  const randomIndex = Math.floor(Math.random() * unguessedLetters.length);
+  const hintLetter = unguessedLetters[randomIndex];
+
+  return hintLetter;
+}
+
+export async function hintScore(
+  gameState: HangmanGameState
+): Promise<string | null> {
+  const { Messages, Spawns, Output, Error } = await messageResult(
+    "CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA",
+    [
+      {
+        name: "Action",
+        value: "Hint-Score",
+      },
+    ]
+  );
+  console.log("Data: ", Messages[0].Data);
+  if (Error) {
+    console.error("Error updating score:", Error);
+    return null;
+  } else if (Messages[0].Data === "Insufficient score.") {
+    console.log("Insufficient score.");
+
+    toast({
+      title: "Insufficient score.",
+      description: "You have at least 2 score.",
+      variant: "destructive",
+    });
+    return null;
+  } else {
+    console.log("Score deducted successfully.");
+
+    const hint = await getHint(gameState);
+    return hint;
   }
 }

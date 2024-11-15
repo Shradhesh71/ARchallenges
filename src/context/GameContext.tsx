@@ -1,7 +1,3 @@
-//  ********************************
-// The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
-// ********************************
-
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";

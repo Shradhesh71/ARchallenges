@@ -17,7 +17,6 @@ export default function HangmanApp() {
   const { mode, setMode } = useGameContext();
   const { connected } = useConnection();
 
-  // If not connected to the Arweave wallet, set the mode to 'landing'
   if (!connected) {
     setMode("landing");
   }

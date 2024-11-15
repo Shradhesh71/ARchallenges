@@ -1,4 +1,3 @@
-
 import "./globals.css";
 import { ArweaveWalletKit } from "arweave-wallet-kit";
 import { Toaster } from "@/components/ui/toaster";
@@ -18,8 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-      >
+      <body>
         <ArweaveWalletKit
           config={{
             permissions: [
@@ -34,7 +32,7 @@ export default function RootLayout({
             displayTheme: "light",
           }}
         >
-        <GameProvider>
+          <GameProvider>
             <Navbar />
             <main className="flex-1 overflow-hidden">{children}</main>
             <Toaster />

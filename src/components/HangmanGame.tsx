@@ -116,7 +116,6 @@ const GameGround = async () => {
 
           {/* Alphabet Buttons */}
           <div className="space-y-4">
-            {/* Row 1: A - I */}
             <div className="flex justify-center gap-2">
               {"qwertyuiop".split("").map((letter) => (
                 <button
@@ -134,7 +133,6 @@ const GameGround = async () => {
               ))}
             </div>
 
-            {/* Row 2: J - R */}
             <div className="flex justify-center gap-2">
               {"asdfghjkl".split("").map((letter) => (
                 <button
@@ -152,7 +150,6 @@ const GameGround = async () => {
               ))}
             </div>
 
-            {/* Row 3: S - Z */}
             <div className="flex justify-center gap-2">
               {"zxcvbnm".split("").map((letter) => (
                 <button

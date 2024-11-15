@@ -8,16 +8,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { useGameContext } from "@/context/GameContext";
 import { messageResult } from "@/lib/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const activeAddress = useActiveAddress();
   const { connected } = useConnection();
   const { gameState } = useGameContext();
-  let playerScore = 0;
+  const [loading, setLoading] = useState(false);
+  const [playerScore, setPlayerScore] = useState(null);
 
   const fetchPlayerDetail = async () => {
-    console.log("Fetching player detail...");
     const tags = [{ name: "Action", value: "Get-Player-Profile" }];
 
     const { Messages, Spawns, Output, Error } = await messageResult(
@@ -26,8 +26,8 @@ export default function Navbar() {
     );
     const player = Messages[0].Data;
     const parsedPlayer = JSON.parse(player);
-    playerScore = parsedPlayer[0]?.score;
-    console.log("Player Score:", playerScore);
+    setPlayerScore(parsedPlayer[0]?.score);
+    setLoading(true);
   };
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function Navbar() {
     <header className="w-full p-4 md:px-8">
       <nav className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Guess & Survive</h1>
-        {activeAddress && connected ? (
+        {activeAddress && connected && loading ? (
           <Button variant="destructive">{playerScore} Score </Button>
         ) : (
           ""

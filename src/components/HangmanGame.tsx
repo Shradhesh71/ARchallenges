@@ -63,8 +63,11 @@ const GameGround = async () => {
 
   useEffect(() => {
     if (gameState.isGameOver) {
+
       if (gameState.remainingAttempts > 0) {
+
         handleGameOver(true, activeAddress);
+        
         toast({
           title: "Congratulations🎉!",
           description: "You have guessed the word correctly.",

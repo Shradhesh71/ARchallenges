@@ -25,7 +25,7 @@ export async function dryrunResult(
 
 export async function messageResult(
   gameProcess: string,
-  tags: { name: string; value: any }[],
+  tags: { name: string; value: string }[],
   data?: any
 ) {
   const res = await message({
@@ -91,7 +91,7 @@ export async function handleGameOver(playerWon: boolean, activeAddress: any) {
         },
         {
           name: "score",
-          value: score,
+          value: score.toString(),
         },
       ]
     );

@@ -2,13 +2,9 @@
 
 import { useGameContext } from "@/context/GameContext";
 import { useEffect } from "react";
-import { dryrunResult, handleGameOver, messageResult } from "@/lib/utils";
+import { handleGameOver, messageResult } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { useActiveAddress } from "arweave-wallet-kit";
-
-//  ********************************
-// The AO Backend and Frontend Integration are ongoing; the repository will be updated as soon as possible.
-// ********************************
 
 type GameStatess = {
   guessedLetters: string;
@@ -63,11 +59,9 @@ const GameGround = async () => {
 
   useEffect(() => {
     if (gameState.isGameOver) {
-
       if (gameState.remainingAttempts > 0) {
-
         handleGameOver(true, activeAddress);
-        
+
         toast({
           title: "Congratulations🎉!",
           description: "You have guessed the word correctly.",

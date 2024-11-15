@@ -1,7 +1,7 @@
 import { useGameContext } from "@/context/GameContext";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { dryrunResult, messageResult } from "@/lib/utils";
+import { messageResult } from "@/lib/utils";
 
 export default function JoinWaiting() {
   const { setMode, gameState } = useGameContext();
@@ -22,7 +22,7 @@ export default function JoinWaiting() {
           },
         ]
       );
-      
+
       if (Messages[0].Data === "Successfully registered.") {
         toast({
           title: "Successfully registered.",

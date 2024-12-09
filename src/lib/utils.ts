@@ -53,6 +53,7 @@ export async function messageResult(
 export async function fetchLeaderboard() {
   try {
     const gameProcess = "CCtxq4831lHxSpRTaeJNuSX8FOx7A2fID4-C27mvbNA";
+    // const gameProcess = "40yZY0aeTTOmkGqqRPH-jAT26acBfyClVgodD_9fTu4";
     const tags = [{ name: "Action", value: "Check-Leaderboard" }];
 
     // Perform the dryrun to fetch the leaderboard data
@@ -100,6 +101,7 @@ export async function handleGameOver(playerWon: boolean, activeAddress: any) {
 
     console.log("Game Over - Score Update", { Messages, Output, Error });
     console.log("Data: ", Messages[0].Data);
+    await aoplay(playerWon);
     if (Error) {
       console.error("Error updating score:", Error);
     } else {
@@ -107,6 +109,44 @@ export async function handleGameOver(playerWon: boolean, activeAddress: any) {
     }
   } catch (error) {
     console.error("Failed to send score update:", error);
+  }
+}
+
+export async function aoplay(playerWon: boolean) {
+  try {
+    const score = playerWon ? 10 : 0;
+    console.log(
+      "gameState.gameProcess: ",
+      "40yZY0aeTTOmkGqqRPH-jAT26acBfyClVgodD_9fTu4"
+    );
+
+    const { Messages, Spawns, Output, Error } = await messageResult(
+      "40yZY0aeTTOmkGqqRPH-jAT26acBfyClVgodD_9fTu4",
+      [
+        {
+          name: "Action",
+          value: "Update-Points",
+        },
+        {
+          name: "point",
+          value: score.toString(),
+        }
+        // {
+        //   name: "game",
+        //   value: "Guess & Survive",
+        // },
+      ]
+    );
+
+    console.log("Game Over - Points Update", { Messages, Output, Error });
+    console.log("Data: ", Messages[0].Data);
+    if (Error) {
+      console.error("Error updating Points:", Error);
+    } else {
+      console.log("Points updated successfully.");
+    }
+  } catch (error) {
+    console.error("Failed to send Points update:", error);
   }
 }
 
